@@ -81,20 +81,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       test('Clear dialog sends datastore-destroyed event', function(done) {
         element.clearDatastore();
-        var eventData;
         element.addEventListener('datastore-destroyed', function(e) {
-          eventData = e.detail;
+          assert.typeOf(e.detail.datastore, 'array', 'Detail contains list of datastores');
+          done();
         });
         // wait for dialog to open
         setTimeout(function() {
           var button = Polymer.dom(element.root)
             .querySelector('#clearDialog paper-button[dialog-confirm]');
           MockInteractions.tap(button);
-          setTimeout(function() {
-            assert.typeOf(eventData, 'object', 'Event was called');
-            assert.typeOf(eventData.datastore, 'array', 'Contains list of datastores');
-            done();
-          }, 300);
         }, 300);
       });
     });
