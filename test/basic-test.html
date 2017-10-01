@@ -46,51 +46,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.notOk(node);
       });
 
-      test('export() opend the export dialog', function() {
-        element.export();
-        var dialog = element.$$('#exportDialog');
-        assert.isTrue(dialog.opened);
-      });
-
-      test('Export dialog sends export-user-data event', function(done) {
-        element.export();
+      test('Export sends export-user-data event', function() {
         var eventData;
         element.addEventListener('export-user-data', function(e) {
           e.preventDefault();
           eventData = e.detail;
           e.detail.result = Promise.resolve();
         });
-        // wait for dialog to open
-        setTimeout(function() {
-          var button = Polymer.dom(element.root)
-            .querySelector('#exportDialog paper-button[dialog-confirm]');
-          MockInteractions.tap(button);
-          setTimeout(function() {
-            assert.typeOf(eventData, 'object', 'Event was called');
-            assert.equal(eventData.type, 'all', 'Exports all data');
-            done();
-          }, 300);
-        }, 300);
-      });
-
-      test('clearDatastore() opend the clear dialog', function() {
-        element.clearDatastore();
-        var dialog = element.$$('#clearDialog');
-        assert.isTrue(dialog.opened);
+        element._exportData({
+          detail: {
+            types: 'test'
+          }
+        });
+        assert.typeOf(eventData, 'object', 'Event was called');
+        assert.equal(eventData.type, 'test', 'Exports all data');
       });
 
       test('Clear dialog sends datastore-destroyed event', function(done) {
-        element.clearDatastore();
         element.addEventListener('datastore-destroyed', function(e) {
           assert.typeOf(e.detail.datastore, 'array', 'Detail contains list of datastores');
           done();
         });
-        // wait for dialog to open
-        setTimeout(function() {
-          var button = Polymer.dom(element.root)
-            .querySelector('#clearDialog paper-button[dialog-confirm]');
-          MockInteractions.tap(button);
-        }, 300);
+        var button = Polymer.dom(element.root).querySelector('[data-action="delete"]');
+        MockInteractions.tap(button);
       });
     });
     </script>
