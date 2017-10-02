@@ -1,3 +1,13 @@
+<a name="0.1.4"></a>
+## [0.1.4](https://github.com/advanced-rest-client/arc-data-settings-panel/compare/0.1.3...0.1.4) (2017-10-02)
+
+
+### Fix
+
+* datastore-destroyed now will report right number of databases. ([622ace28eab040e5f62b0212d64efe05ef527937](https://github.com/advanced-rest-client/arc-data-settings-panel/commit/622ace28eab040e5f62b0212d64efe05ef527937))
+
+
+
 <a name="0.1.3"></a>
 ## [0.1.3](https://github.com/advanced-rest-client/arc-data-settings-panel/compare/0.1.2...0.1.3) (2017-10-02)
 
