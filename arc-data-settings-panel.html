@@ -262,6 +262,7 @@ Custom property | Description | Default
         dbs.push('variables-environments');
       }
 
+      var listCopy = Array.from(dbs);
       this.$.deletingToast.opened = true;
       this.deletingDatabases = true;
 
@@ -279,7 +280,7 @@ Custom property | Description | Default
           });
         }
         this.fire('datastore-destroyed', {
-          datastore: dbs
+          datastore: listCopy
         });
       });
     },
