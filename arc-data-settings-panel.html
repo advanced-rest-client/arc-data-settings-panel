@@ -18,8 +18,6 @@ the License.
 <link rel="import" href="../paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../paper-spinner/paper-spinner.html">
 <link rel="import" href="../paper-toast/paper-toast.html">
-<link rel="import" href="../paper-dialog/paper-dialog.html">
-<link rel="import" href="../paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
@@ -27,6 +25,10 @@ the License.
 <link rel="import" href="../iron-form/iron-form.html">
 <link rel="import" href="../arc-icons/arc-icons.html">
 <link rel="import" href="../app-pouchdb/pouchdb.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../export-panel/export-data-selector.html">
+<link rel="import" href="../paper-styles/shadow.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
 
 <!--
 A user data related settings panel.
@@ -106,86 +108,99 @@ Custom property | Description | Default
     #exportForm paper-checkbox {
       margin: 12px 0px;
     }
+
+    .card {
+      @apply --shadow-elevation-2dp;
+    }
+
+    .card.padding {
+      padding: 16px;
+    }
+
+    .error-toast {
+      background-color: var(--warning-primary-color, #FF7043);
+      color: var(--warning-contrast-color, #fff);
+      @apply --error-toast;
+    }
     </style>
-    <h2>Stored data</h2>
-    <paper-material elevation="1">
-      <paper-item>
-        <paper-item-body two-line>
-          <div>Collect cookies</div>
-          <div secondary>Mimics browser behavior when receiving and sending cookies</div>
-        </paper-item-body>
-        <paper-toggle-button class="clickable" checked="{{cookieStorage}}"></paper-toggle-button>
-      </paper-item>
-      <paper-item on-tap="export" class="clickable">
-        <paper-item-body two-line>
-          <div>Save stored data to file</div>
-          <div secondary>Save history, saved requests and projects data to file.</div>
-        </paper-item-body>
-        <iron-icon icon="arc:arrow-drop-down" class="nav-away-icon" item-icon></iron-icon>
-      </paper-item>
-      <paper-item on-tap="clearDatastore" class="clickable">
-        <paper-item-body>
-          <div>Clear stored data</div>
-        </paper-item-body>
-        <template is="dom-if" if="[[deletingDatabases]]">
-          <paper-spinner item-icon active="[[deletingDatabases]]"></paper-spinner>
-        </template>
-        <iron-icon icon="arc:arrow-drop-down" class="nav-away-icon" item-icon hidden$="[[deletingDatabases]]"></iron-icon>
-      </paper-item>
-    </paper-material>
+    <iron-pages selected="{{page}}">
+      <section>
+        <h2>Stored data</h2>
+        <div class="card">
+          <paper-item>
+            <paper-item-body two-line>
+              <div>Collect cookies</div>
+              <div secondary>Mimics browser behavior when receiving and sending cookies</div>
+            </paper-item-body>
+            <paper-toggle-button class="clickable" checked="{{cookieStorage}}"></paper-toggle-button>
+          </paper-item>
+          <paper-item data-page="1" on-tap="_showPage" class="clickable">
+            <paper-item-body two-line>
+              <div>Save stored data to file</div>
+              <div secondary>Save history, saved requests and projects data to file.</div>
+            </paper-item-body>
+            <iron-icon icon="arc:arrow-drop-down" class="nav-away-icon" item-icon></iron-icon>
+          </paper-item>
+          <paper-item data-page="2" on-tap="_showPage" class="clickable">
+            <paper-item-body>
+              <div>Clear stored data</div>
+            </paper-item-body>
+            <template is="dom-if" if="[[deletingDatabases]]">
+              <paper-spinner item-icon active="[[deletingDatabases]]"></paper-spinner>
+            </template>
+            <iron-icon icon="arc:arrow-drop-down" class="nav-away-icon" item-icon hidden$="[[deletingDatabases]]"></iron-icon>
+          </paper-item>
+        </div>
+      </section>
+
+      <section>
+        <h2>
+          <paper-icon-button icon="arc:arrow-back" on-tap="back"></paper-icon-button>
+          Data export
+        </h2>
+        <div class="card padding">
+          <export-data-selector on-export="_exportData"></export-data-selector>
+        </div>
+      </section>
+
+      <section>
+        <h2>
+          <paper-icon-button icon="arc:arrow-back" on-tap="back"></paper-icon-button>
+          Clear stored data
+        </h2>
+        <div class="card padding">
+          <p>What to remove?</p>
+          <form is="iron-form" id="clearForm">
+            <paper-checkbox name="saved-requests" checked>Saved requests and projects</paper-checkbox>
+            <paper-checkbox name="history-requests" checked>Requests history</paper-checkbox>
+            <paper-checkbox name="cookies" checked>Cookies</paper-checkbox>
+            <paper-checkbox name="auth-data" checked>Saved passwords</paper-checkbox>
+            <paper-checkbox name="url-history" checked>URLs history (autofill data)</paper-checkbox>
+            <paper-checkbox name="websocket-url-history" checked>Web sockets history</paper-checkbox>
+            <paper-checkbox name="headers-sets" checked>Headers sets</paper-checkbox>
+            <paper-checkbox name="variables" checked>variables and environments</paper-checkbox>
+          </form>
+          <paper-button on-tap="_deleteDatabases" class="error-toast" data-action="delete">Remove</paper-button>
+        </div>
+      </section>
+    </iron-pages>
 
     <paper-toast id="exportToast" text="Preparing data. This may take a minute."></paper-toast>
     <paper-toast id="exportError" text="Export unavailable (missing component). Please, report an issue."></paper-toast>
     <paper-toast id="deletingToast" text="Removing data from the datastore. This may take a minute."></paper-toast>
-    <paper-toast id="deletedToast" text="The data are destroyed."></paper-toast>
+    <paper-toast id="deletedToast" text="The data are now destroyed."></paper-toast>
     <paper-toast id="deletedErrorToast" text="Some of the data wasn't cleared. Please, report an issue."></paper-toast>
-
-    <paper-dialog id="exportDialog" on-iron-overlay-closed="_onExportDialogResult">
-      <h2>Data export</h2>
-      <paper-dialog-scrollable>
-        <p>What to include in the export file?</p>
-        <form is="iron-form" id="exportForm">
-          <paper-checkbox name="saved" checked>Saved requests and projects</paper-checkbox>
-          <paper-checkbox name="history" checked>Requests history</paper-checkbox>
-          <paper-checkbox name="cookies" checked>Cookies</paper-checkbox>
-          <paper-checkbox name="auth" checked>Saved passwords</paper-checkbox>
-          <paper-checkbox name="history-url" checked>URLs history (autofill data)</paper-checkbox>
-          <paper-checkbox name="websocket" checked>Web sockets history</paper-checkbox>
-          <paper-checkbox name="headers-sets" checked>Headers sets</paper-checkbox>
-          <paper-checkbox name="variables" checked>Variables data</paper-checkbox>
-        </form>
-      </paper-dialog-scrollable>
-      <div class="buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm autofocus>Export</paper-button>
-      </div>
-    </paper-dialog>
-
-    <paper-dialog id="clearDialog" on-iron-overlay-closed="_onClearDialogResult">
-      <h2>Clear stored data</h2>
-      <paper-dialog-scrollable>
-        <p>What to remove?</p>
-        <form is="iron-form" id="clearForm">
-          <paper-checkbox id="deleteSavedOption" on-iron-change="_deleteSavedChanged" name="saved-requests" checked>Saved requests (will also delete projects)</paper-checkbox>
-          <paper-checkbox id="deleteProjectsOption" name="legacy-projects" checked>Projects</paper-checkbox>
-          <paper-checkbox name="history-requests" checked>Requests history</paper-checkbox>
-          <paper-checkbox name="history-data" checked>History data stored for performance analysis</paper-checkbox>
-          <paper-checkbox name="cookies" checked>Cookies</paper-checkbox>
-          <paper-checkbox name="auth-data" checked>Saved passwords</paper-checkbox>
-          <paper-checkbox name="url-history" checked>URLs history (autofill data)</paper-checkbox>
-          <paper-checkbox name="websocket-url-history" checked>Web sockets history</paper-checkbox>
-        </form>
-      </paper-dialog-scrollable>
-      <div class="buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm autofocus>Remove</paper-button>
-      </div>
-    </paper-dialog>
   </template>
   <script>
   Polymer({
     is: 'arc-data-settings-panel',
     properties: {
+      // Currently displayed page of the settings editor
+      page: {
+        type: Number,
+        value: 0,
+        notify: true
+      },
       /**
        * State of the cookis enabled settings.
        */
@@ -195,30 +210,12 @@ Custom property | Description | Default
       },
       deletingDatabases: Boolean
     },
-    // Opens data export dialog.
-    export: function() {
-      this.$.exportDialog.open();
-    },
-    // Called when the data export dialog has been closed.
-    _onExportDialogResult: function(e) {
-      if (e.detail.canceled || !e.detail.confirmed) {
-        return;
-      }
-      var clear = this.$.exportForm.serialize();
-      var dbs = Object.keys(clear);
-      if (dbs.length === 8) {
-        dbs = 'all';
-      }
-      this._exportData(dbs);
-    },
     /**
      * Requests data export for selected data types.
      * Fires `export-user-data` event that can be handled by `arc-data-export`
      * element or any compatible.
-     *
-     * @param {String|Array<String>} sources Type or list of data types to export.
      */
-    _exportData: function(sources) {
+    _exportData: function(e) {
       this.$.exportToast.opened = true;
 
       var date = new Date();
@@ -227,7 +224,7 @@ Custom property | Description | Default
       var month = date.getMonth() + 1;
 
       var event = this.fire('export-user-data', {
-        type: sources,
+        type: e.detail.types,
         file: 'arc-export-' + day + '-' + month + '-' + year + '.json'
       }, {
         cancelable: true,
@@ -252,35 +249,17 @@ Custom property | Description | Default
       });
     },
     /**
-     * Handler to be called on clear data action.
-     * Opens the settings & confirmation dialog.
-     */
-    clearDatastore: function() {
-      this.$.clearDialog.open();
-    },
-    /**
-     * Handler to be called when the user selects to delete requests data.
-     * It will select and disable "projects" option as required when clearing the requests.
-     * If the state is deselected then the "clear projects" option will become active again.
-     */
-    _deleteSavedChanged: function(e) {
-      this.$.deleteProjectsOption.disabled = e.target.checked;
-      if (e.target.checked) {
-        this.$.deleteProjectsOption.checked = true;
-      }
-    },
-    /**
      * Handler to be called when the clear data dialog has been closed.
      * It it's not canceled then it will clear (destroy) selected datastores.
      */
-    _onClearDialogResult: function(e) {
-      if (e.detail.canceled || !e.detail.confirmed) {
-        return;
-      }
+    _deleteDatabases: function() {
       var clear = this.$.clearForm.serialize();
       var dbs = Object.keys(clear);
       if (dbs.indexOf('saved-requests') !== -1) {
         dbs.push('legacy-projects');
+      }
+      if (dbs.indexOf('variables') !== -1) {
+        dbs.push('variables-environments');
       }
 
       this.$.deletingToast.opened = true;
@@ -354,6 +333,49 @@ Custom property | Description | Default
           reject(new Error('Unable to delete ' + dbName));
         };
       });
+    },
+
+    // Shows internal sub-page
+    _showPage: function(e) {
+      var target;
+      var nodeName = 'PAPER-ITEM';
+      switch (nodeName) {
+        case e.target.nodeName: target = e.target; break;
+        case e.currentTarget.nodeName: target = e.currentTarget; break;
+        default:
+          if (e.originalTarget && e.originalTarget.nodeName === nodeName) {
+            target = e.originalTarget;
+          }
+      }
+      if (!target && e.path) {
+        var path = e.path;
+        while (true) {
+          let _elm = path.shift();
+          if (!_elm) {
+            throw new Error('paper-item not found in path');
+          }
+          if (_elm.nodeName === 'PAPER-ITEM') {
+            target = _elm;
+            break;
+          }
+        }
+      }
+      if (!target) {
+        throw new Error('Event target not found.');
+      }
+      var page = target.dataset.page;
+      if (!page) {
+        throw new Error('Event target does not contain page information.');
+      }
+      page = Number(page);
+      if (page !== page) {
+        throw new Error('Page is not a number');
+      }
+      this.page = page;
+    },
+    // restores the main page of the editor.
+    back: function() {
+      this.page = 0;
     }
   });
   </script>
