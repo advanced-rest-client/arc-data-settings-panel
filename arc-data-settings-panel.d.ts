@@ -25,6 +25,7 @@
 /// <reference path="../paper-icon-button/paper-icon-button.d.ts" />
 /// <reference path="../export-panel/export-form.d.ts" />
 /// <reference path="../paper-dialog/paper-dialog.d.ts" />
+/// <reference path="../arc-settings-panel-mixin/arc-settings-panel-mixin.d.ts" />
 
 declare namespace UiElements {
 
@@ -54,7 +55,9 @@ declare namespace UiElements {
    * `--arc-settings-panel-header-color` | Color of the settings panel header | `--accent-color`
    * `--arc-settings-panel-icon-color` | Settings panel icon color | `rgba(0, 0, 0, 0.34)`
    */
-  class ArcDataSettingsPanel extends Polymer.Element {
+  class ArcDataSettingsPanel extends
+    ArcComponents.ArcSettingsPanelMixin(
+    Polymer.Element) {
 
     /**
      * Currently displayed page of the settings editor
@@ -77,16 +80,6 @@ declare namespace UiElements {
      * It it's not canceled then it will clear (destroy) selected datastores.
      */
     deleteDatabases(): Promise<any>|null;
-
-    /**
-     * Shows internal sub-page
-     */
-    _showPage(e: any): void;
-
-    /**
-     * restores the main page of the editor.
-     */
-    back(): void;
     _exportAllFile(): void;
   }
 }

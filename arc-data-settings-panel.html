@@ -28,7 +28,7 @@ the License.
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../export-panel/export-form.html">
 <link rel="import" href="../paper-dialog/paper-dialog.html">
-
+<link rel="import" href="../arc-settings-panel-mixin/arc-settings-panel-mixin.html">
 <dom-module id="arc-data-settings-panel">
   <template>
     <style>
@@ -205,8 +205,9 @@ the License.
    * @polymer
    * @memberof UiElements
    * @demo demo/index.html
+   * @appliesMixin ArcComponents.ArcSettingsPanelMixin
    */
-  class ArcDataSettingsPanel extends Polymer.Element {
+  class ArcDataSettingsPanel extends ArcComponents.ArcSettingsPanelMixin(Polymer.Element) {
     static get is() {return 'arc-data-settings-panel';}
     static get properties() {
       return {
@@ -275,32 +276,7 @@ the License.
         throw cause;
       });
     }
-
-    // Shows internal sub-page
-    _showPage(e) {
-      const path = e.composedPath();
-      let target;
-      const nodeName = 'PAPER-ITEM';
-      while (true) {
-        const item = path.shift();
-        if (!item) {
-          return;
-        }
-        if (item.nodeName === nodeName) {
-          target = item;
-          break;
-        }
-      }
-      const page = Number(target.dataset.page);
-      if (page === page) {
-        this.page = page;
-      }
-    }
-    // restores the main page of the editor.
-    back() {
-      this.page = 0;
-    }
-
+    
     _exportAllFile() {
       const form = this.shadowRoot.querySelector('export-form');
       form.selectAll();
