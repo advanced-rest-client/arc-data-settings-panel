@@ -102,6 +102,15 @@ the License.
       <section>
         <h2>Stored data</h2>
         <div class="card">
+          <paper-item class="clickable" on-click="_toggleOption">
+            <paper-item-body two-line>
+              <div>
+                Save history data
+              </div>
+              <div secondary>Automatically saves requests in a history</div>
+            </paper-item-body>
+            <paper-toggle-button tabindex="-1" checked="{{historyEnabled}}" on-click="_cancelEvent"></paper-toggle-button>
+          </paper-item>
           <paper-item data-page="1" on-click="_showPage" class="clickable">
             <paper-item-body two-line>
               <div>Save stored data to file</div>
@@ -214,10 +223,17 @@ the License.
         // Currently displayed page of the settings editor
         page: {
           type: Number,
-          value: 0,
-          notify: true
+          value: 0
         },
-        deletingDatabases: Boolean
+        deletingDatabases: Boolean,
+        /**
+         * History store enabled / disabled
+         */
+        historyEnabled: {
+          type: Boolean,
+          notify: true,
+          observer: '_historyChanged'
+        }
       };
     }
 
@@ -276,11 +292,40 @@ the License.
         throw cause;
       });
     }
-    
+
     _exportAllFile() {
       const form = this.shadowRoot.querySelector('export-form');
       form.selectAll();
       form.startExport();
+    }
+
+    _processValues(values) {
+      if (typeof values.historyEnabled === 'undefined') {
+        values.historyEnabled = true;
+      } else {
+        values.historyEnabled = this._boolValue(values.historyEnabled);
+      }
+      return values;
+    }
+
+    _setSettings(values) {
+      this.__settingsRestored = false;
+      this.historyEnabled = values.historyEnabled;
+      this.__settingsRestored = true;
+    }
+
+    _historyChanged(value) {
+      this.updateSetting('historyEnabled', value);
+    }
+
+    _settingsChanged(key, value) {
+      this.__settingsRestored = false;
+      switch (key) {
+        case 'historyEnabled':
+          this[key] = this._boolValue(value);
+          break;
+      }
+      this.__settingsRestored = true;
     }
   }
   window.customElements.define(ArcDataSettingsPanel.is, ArcDataSettingsPanel);

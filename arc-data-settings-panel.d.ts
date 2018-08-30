@@ -66,6 +66,13 @@ declare namespace UiElements {
     deletingDatabases: boolean|null|undefined;
 
     /**
+     * History store enabled / disabled
+     */
+    historyEnabled: boolean|null|undefined;
+    _processValues(values: any): any;
+    _setSettings(values: any): void;
+
+    /**
      * Handler for delete all click
      */
     _deleteAllClick(): void;
@@ -81,6 +88,8 @@ declare namespace UiElements {
      */
     deleteDatabases(): Promise<any>|null;
     _exportAllFile(): void;
+    _historyChanged(value: any): void;
+    _settingsChanged(key: any, value: any): void;
   }
 }
 
