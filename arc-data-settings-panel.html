@@ -29,36 +29,18 @@ the License.
 <link rel="import" href="../export-panel/export-form.html">
 <link rel="import" href="../paper-dialog/paper-dialog.html">
 <link rel="import" href="../arc-settings-panel-mixin/arc-settings-panel-mixin.html">
+<link rel="import" href="../arc-settings-panel-mixin/arc-settings-panel-styles.html">
 <dom-module id="arc-data-settings-panel">
   <template>
-    <style>
+    <style include="arc-settings-panel-styles">
     :host {
       display: block;
       @apply --arc-data-settings-panel;
     }
 
-    h2 {
-      @apply --arc-font-subhead;
-      @apply --layout-horizontal;
-      @apply --layout-center;
+    h2.panel-title {
       height: 48px;
-      color: var(--arc-settings-panel-header-color);
       margin: 0;
-      @apply --arc-settings-panel-header;
-    }
-
-    iron-icon {
-      color: var(--arc-settings-panel-icon-color, rgba(0, 0, 0, 0.34));
-      width: 24px;
-      height: 24px;
-    }
-
-    .nav-away-icon {
-      transform: rotate(-90deg);
-    }
-
-    .clickable {
-      cursor: pointer;
     }
 
     #clearForm {
@@ -68,18 +50,6 @@ the License.
     #clearForm paper-checkbox {
       margin: 12px 0px;
       display: block;
-    }
-
-    .card {
-      padding: 12px;
-      border-radius: 4px;
-      @apply --shadow-elevation-4dp;
-    }
-
-    .error-toast {
-      background-color: var(--warning-primary-color, #FF7043);
-      color: var(--warning-contrast-color, #fff);
-      @apply --error-toast;
     }
 
     #dataClearDialog {
@@ -100,7 +70,7 @@ the License.
     </style>
     <iron-pages selected="{{page}}">
       <section>
-        <h2>Stored data</h2>
+        <h2 class="panel-title">Stored data</h2>
         <div class="card">
           <paper-item class="clickable" on-click="_toggleOption">
             <paper-item-body two-line>
@@ -116,7 +86,7 @@ the License.
               <div>Save stored data to file</div>
               <div secondary>Save history, saved requests and projects data to file.</div>
             </paper-item-body>
-            <iron-icon icon="arc:arrow-drop-down" class="nav-away-icon" item-icon></iron-icon>
+            <iron-icon icon="arc:arrow-drop-down" class="panel-icon nav-away-icon" item-icon></iron-icon>
           </paper-item>
           <paper-item data-page="2" on-click="_showPage" class="clickable">
             <paper-item-body>
@@ -125,13 +95,13 @@ the License.
             <template is="dom-if" if="[[deletingDatabases]]">
               <paper-spinner item-icon active="[[deletingDatabases]]"></paper-spinner>
             </template>
-            <iron-icon icon="arc:arrow-drop-down" class="nav-away-icon" item-icon hidden$="[[deletingDatabases]]"></iron-icon>
+            <iron-icon icon="arc:arrow-drop-down" class="panel-icon nav-away-icon" item-icon hidden$="[[deletingDatabases]]"></iron-icon>
           </paper-item>
         </div>
       </section>
 
       <section>
-        <h2>
+        <h2 class="panel-title">
           <paper-icon-button icon="arc:arrow-back" on-click="back"></paper-icon-button>
           Data export
         </h2>
@@ -141,7 +111,7 @@ the License.
       </section>
 
       <section>
-        <h2>
+        <h2 class="panel-title">
           <paper-icon-button icon="arc:arrow-back" on-click="back"></paper-icon-button>
           Clear stored data
         </h2>
@@ -168,7 +138,7 @@ the License.
     </iron-pages>
 
     <paper-dialog id="dataClearDialog" on-iron-overlay-closed="_onClearDialogResult">
-      <h2>Danger zone</h2>
+      <h2 class="panel-title">Danger zone</h2>
       <p>This will remove all application data. Without option to restore it.</p>
       <p>Maybe you should create a backup first?</p>
       <div class="buttons">
