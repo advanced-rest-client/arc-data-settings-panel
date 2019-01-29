@@ -34,7 +34,7 @@
     "paper-icon-button": "PolymerElements/paper-icon-button#^2.0.0",
     "export-panel": "advanced-rest-client/export-panel#2.0.0-preview",
     "paper-dialog": "PolymerElements/paper-dialog#^2.0.0",
-    "arc-settings-panel-mixin": "advanced-rest-client/arc-settings-panel-mixin#2.0.0-preview"
+    "arc-settings-panel-mixin": "advanced-rest-client/arc-settings-panel-mixin#^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^3.0.1",
@@ -47,7 +47,7 @@
     "arc-models": "advanced-rest-client/arc-models#2.0.0-preview",
     "arc-electron-default-theme": "advanced-rest-client/arc-electron-default-theme#2.0.0-preview",
     "web-animations-js": "web-animations/web-animations-js#^2.3",
-    "arc-local-store-preferences": "advanced-rest-client/arc-local-store-preferences#2.0.0-preview"
+    "arc-local-store-preferences": "advanced-rest-client/arc-local-store-preferences#^2.0.0"
   },
   "ignore": [
     "**/.*",
