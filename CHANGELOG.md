@@ -44,3 +44,22 @@
 
 
 
+# [2.0.0](https://github.com/advanced-rest-client/arc-data-settings-panel/compare/0.1.4...2.0.0) (2019-01-29)
+
+
+### Docs
+
+* Updating polymer docs ([c21ed9dff2802a8bc6c137f8ff261b7ddf494aef](https://github.com/advanced-rest-client/arc-data-settings-panel/commit/c21ed9dff2802a8bc6c137f8ff261b7ddf494aef))
+
+### New
+
+* Adding `historyEnabled` option ([db03a5ea808f50b15861e167ccbf20ba4dab1d10](https://github.com/advanced-rest-client/arc-data-settings-panel/commit/db03a5ea808f50b15861e167ccbf20ba4dab1d10))
+* Adding test coverage ([fc5694d0a7bb9722464778f001d2f98d45aee940](https://github.com/advanced-rest-client/arc-data-settings-panel/commit/fc5694d0a7bb9722464778f001d2f98d45aee940))
+
+### Update
+
+* Adding common mixni ([6cce6a0fba046d000fd7b021fc5cac380c6d4adb](https://github.com/advanced-rest-client/arc-data-settings-panel/commit/6cce6a0fba046d000fd7b021fc5cac380c6d4adb))
+* Updating dependencies ([333a5d38be48d33205f4da5885616893522852c0](https://github.com/advanced-rest-client/arc-data-settings-panel/commit/333a5d38be48d33205f4da5885616893522852c0))
+
+
+
