@@ -213,11 +213,10 @@ the License.
     }
 
     // Called when delete datastore dialog is closed.
-    _onClearDialogResult(e, detail) {
-      if (!detail.confirmed) {
+    _onClearDialogResult(e) {
+      if (!e.detail.confirmed) {
         return;
       }
-
       this.deleteDatabases();
     }
     /**
