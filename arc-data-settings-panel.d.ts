@@ -8,6 +8,10 @@
  *   arc-data-settings-panel.html
  */
 
+
+// tslint:disable:variable-name Describing an API that's defined elsewhere.
+// tslint:disable:no-any describes the API as best we are able today
+
 /// <reference path="../polymer/types/polymer-element.d.ts" />
 /// <reference path="../paper-item/paper-item.d.ts" />
 /// <reference path="../paper-item/paper-item-body.d.ts" />
@@ -81,7 +85,7 @@ declare namespace UiElements {
     /**
      * Called when delete datastore dialog is closed.
      */
-    _onClearDialogResult(e: any, detail: any): void;
+    _onClearDialogResult(e: any): void;
 
     /**
      * Handler to be called when the clear data dialog has been closed.
