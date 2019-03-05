@@ -11,27 +11,26 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
-import { PolymerElement } from '../../@polymer/polymer/polymer-element.js';
-
-import '../../@polymer/paper-item/paper-item.js';
-import '../../@polymer/paper-item/paper-item-body.js';
-import '../../@polymer/paper-toggle-button/paper-toggle-button.js';
-import '../../@polymer/paper-spinner/paper-spinner.js';
-import '../../@polymer/paper-toast/paper-toast.js';
-import '../../@polymer/paper-checkbox/paper-checkbox.js';
-import '../../@polymer/paper-button/paper-button.js';
-import '../../@polymer/iron-icon/iron-icon.js';
-import '../../@polymer/iron-flex-layout/iron-flex-layout.js';
-import '../../@polymer/iron-form/iron-form.js';
-import '../../arc-icons/arc-icons.js';
-import '../../@polymer/iron-pages/iron-pages.js';
-import '../../@polymer/paper-styles/shadow.js';
-import '../../@polymer/paper-icon-button/paper-icon-button.js';
-import '../../export-panel/export-form.js';
-import '../../@polymer/paper-dialog/paper-dialog.js';
-import '../../arc-settings-panel-mixin/arc-settings-panel-mixin.js';
-import '../../arc-settings-panel-mixin/arc-settings-panel-styles.js';
-import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-item/paper-item-body.js';
+import '@polymer/paper-toggle-button/paper-toggle-button.js';
+import '@polymer/paper-spinner/paper-spinner.js';
+import '@polymer/paper-toast/paper-toast.js';
+import '@polymer/paper-checkbox/paper-checkbox.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import '@polymer/iron-form/iron-form.js';
+import '@advanced-rest-client/arc-icons/arc-icons.js';
+import '@polymer/iron-pages/iron-pages.js';
+import '@polymer/paper-styles/shadow.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@advanced-rest-client/export-panel/export-form.js';
+import '@polymer/paper-dialog/paper-dialog.js';
+import {ArcSettingsPanelMixin} from '@advanced-rest-client/arc-settings-panel-mixin/arc-settings-panel-mixin.js';
+import '@advanced-rest-client/arc-settings-panel-mixin/arc-settings-panel-styles.js';
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 /**
  * User data related settings panel for Advanced REST client
  *
@@ -62,9 +61,9 @@ import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
  * @polymer
  * @memberof UiElements
  * @demo demo/index.html
- * @appliesMixin ArcComponents.ArcSettingsPanelMixin
+ * @appliesMixin ArcSettingsPanelMixin
  */
-class ArcDataSettingsPanel extends ArcComponents.ArcSettingsPanelMixin(PolymerElement) {
+class ArcDataSettingsPanel extends ArcSettingsPanelMixin(PolymerElement) {
   static get template() {
     return html`
     <style include="arc-settings-panel-styles">
@@ -114,7 +113,8 @@ class ArcDataSettingsPanel extends ArcComponents.ArcSettingsPanelMixin(PolymerEl
               </div>
               <div secondary="">Automatically saves requests in a history</div>
             </paper-item-body>
-            <paper-toggle-button tabindex="-1" checked="{{historyEnabled}}" on-click="_cancelEvent"></paper-toggle-button>
+            <paper-toggle-button tabindex="-1" checked="{{historyEnabled}}"
+              on-click="_cancelEvent"></paper-toggle-button>
           </paper-item>
           <paper-item data-page="1" on-click="_showPage" class="clickable">
             <paper-item-body two-line="">
@@ -130,7 +130,8 @@ class ArcDataSettingsPanel extends ArcComponents.ArcSettingsPanelMixin(PolymerEl
             <template is="dom-if" if="[[deletingDatabases]]">
               <paper-spinner item-icon="" active="[[deletingDatabases]]"></paper-spinner>
             </template>
-            <iron-icon icon="arc:arrow-drop-down" class="panel-icon nav-away-icon" item-icon="" hidden\$="[[deletingDatabases]]"></iron-icon>
+            <iron-icon icon="arc:arrow-drop-down" class="panel-icon nav-away-icon" item-icon
+              hidden\$="[[deletingDatabases]]"></iron-icon>
           </paper-item>
         </div>
       </section>
@@ -166,7 +167,8 @@ class ArcDataSettingsPanel extends ArcComponents.ArcSettingsPanelMixin(PolymerEl
             </form>
           </iron-form>
           <div class="actions">
-            <paper-button on-click="_deleteAllClick" raised="" class="error-toast" data-action="delete">Remove</paper-button>
+            <paper-button on-click="_deleteAllClick" raised class="error-toast"
+              data-action="delete">Remove</paper-button>
           </div>
         </div>
       </section>
@@ -190,7 +192,6 @@ class ArcDataSettingsPanel extends ArcComponents.ArcSettingsPanelMixin(PolymerEl
 `;
   }
 
-  static get is() {return 'arc-data-settings-panel';}
   static get properties() {
     return {
       // Currently displayed page of the settings editor
@@ -300,4 +301,4 @@ class ArcDataSettingsPanel extends ArcComponents.ArcSettingsPanelMixin(PolymerEl
     this.__settingsRestored = true;
   }
 }
-window.customElements.define(ArcDataSettingsPanel.is, ArcDataSettingsPanel);
+window.customElements.define('arc-data-settings-panel', ArcDataSettingsPanel);
