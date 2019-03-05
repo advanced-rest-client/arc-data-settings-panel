@@ -1,0 +1,303 @@
+/**
+@license
+Copyright 2016 The Advanced REST client authors <arc@mulesoft.com>
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+*/
+import { PolymerElement } from '../../@polymer/polymer/polymer-element.js';
+
+import '../../@polymer/paper-item/paper-item.js';
+import '../../@polymer/paper-item/paper-item-body.js';
+import '../../@polymer/paper-toggle-button/paper-toggle-button.js';
+import '../../@polymer/paper-spinner/paper-spinner.js';
+import '../../@polymer/paper-toast/paper-toast.js';
+import '../../@polymer/paper-checkbox/paper-checkbox.js';
+import '../../@polymer/paper-button/paper-button.js';
+import '../../@polymer/iron-icon/iron-icon.js';
+import '../../@polymer/iron-flex-layout/iron-flex-layout.js';
+import '../../@polymer/iron-form/iron-form.js';
+import '../../arc-icons/arc-icons.js';
+import '../../@polymer/iron-pages/iron-pages.js';
+import '../../@polymer/paper-styles/shadow.js';
+import '../../@polymer/paper-icon-button/paper-icon-button.js';
+import '../../export-panel/export-form.js';
+import '../../@polymer/paper-dialog/paper-dialog.js';
+import '../../arc-settings-panel-mixin/arc-settings-panel-mixin.js';
+import '../../arc-settings-panel-mixin/arc-settings-panel-styles.js';
+import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
+/**
+ * User data related settings panel for Advanced REST client
+ *
+ * Database export is handled by sending `export-user-data` custom event that
+ * is handled by the `<arc-data-export>` (or any other compatible) element.
+ *
+ * ### Example
+ *
+ * ```html
+ * <arc-data-export app-version="12.0.0" electron-cookies></arc-data-export>
+ * <google-drive-upload></google-drive-upload>
+ * <file-save></file-save>
+ * ... ARC models imports
+ * <arc-data-settings-panel></arc-data-settings-panel>
+ * ```
+ *
+ * ### Styling
+ * `<arc-data-settings-panel>` provides the following custom properties and mixins for styling:
+ *
+ * Custom property | Description | Default
+ * ----------------|-------------|----------
+ * `--arc-data-settings-panel` | Mixin applied to the element | `{}`
+ * `--arc-settings-panel-header` | Mixin applied to settings panel header | `{}`
+ * `--arc-settings-panel-header-color` | Color of the settings panel header | `--accent-color`
+ * `--arc-settings-panel-icon-color` | Settings panel icon color | `rgba(0, 0, 0, 0.34)`
+ *
+ * @customElement
+ * @polymer
+ * @memberof UiElements
+ * @demo demo/index.html
+ * @appliesMixin ArcComponents.ArcSettingsPanelMixin
+ */
+class ArcDataSettingsPanel extends ArcComponents.ArcSettingsPanelMixin(PolymerElement) {
+  static get template() {
+    return html`
+    <style include="arc-settings-panel-styles">
+    :host {
+      display: block;
+      @apply --arc-data-settings-panel;
+    }
+
+    h2.panel-title {
+      height: 48px;
+      margin: 0;
+    }
+
+    #clearForm {
+      @apply --layout-vertical;
+    }
+
+    #clearForm paper-checkbox {
+      margin: 12px 0px;
+      display: block;
+    }
+
+    #dataClearDialog {
+      background-color: var(--warning-primary-color, #FF7043);
+      color: var(--warning-contrast-color, #fff);
+    }
+
+    #dataClearDialog paper-button {
+      color: #fff;
+      background-color: transparent;
+    }
+
+    .actions {
+      @apply --layout-horizontal;
+      @apply --layout-center;
+      margin-top: 24px;
+    }
+    </style>
+    <iron-pages selected="{{page}}">
+      <section>
+        <h2 class="panel-title">Stored data</h2>
+        <div class="card">
+          <paper-item class="clickable" on-click="_toggleOption">
+            <paper-item-body two-line="">
+              <div>
+                Save history data
+              </div>
+              <div secondary="">Automatically saves requests in a history</div>
+            </paper-item-body>
+            <paper-toggle-button tabindex="-1" checked="{{historyEnabled}}" on-click="_cancelEvent"></paper-toggle-button>
+          </paper-item>
+          <paper-item data-page="1" on-click="_showPage" class="clickable">
+            <paper-item-body two-line="">
+              <div>Save stored data to file</div>
+              <div secondary="">Save history, saved requests and projects data to file.</div>
+            </paper-item-body>
+            <iron-icon icon="arc:arrow-drop-down" class="panel-icon nav-away-icon" item-icon=""></iron-icon>
+          </paper-item>
+          <paper-item data-page="2" on-click="_showPage" class="clickable">
+            <paper-item-body>
+              <div>Clear stored data</div>
+            </paper-item-body>
+            <template is="dom-if" if="[[deletingDatabases]]">
+              <paper-spinner item-icon="" active="[[deletingDatabases]]"></paper-spinner>
+            </template>
+            <iron-icon icon="arc:arrow-drop-down" class="panel-icon nav-away-icon" item-icon="" hidden\$="[[deletingDatabases]]"></iron-icon>
+          </paper-item>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="panel-title">
+          <paper-icon-button icon="arc:arrow-back" on-click="back"></paper-icon-button>
+          Data export
+        </h2>
+        <div class="card">
+          <export-form></export-form>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="panel-title">
+          <paper-icon-button icon="arc:arrow-back" on-click="back"></paper-icon-button>
+          Clear stored data
+        </h2>
+        <div class="card">
+          <p>What to remove?</p>
+          <iron-form id="clearForm">
+            <form>
+              <paper-checkbox name="saved-requests" checked="">Saved requests and projects</paper-checkbox>
+              <paper-checkbox name="history-requests" checked="">Requests history</paper-checkbox>
+              <paper-checkbox name="cookies" checked="">Cookies</paper-checkbox>
+              <paper-checkbox name="auth-data" checked="">Saved passwords</paper-checkbox>
+              <paper-checkbox name="url-history" checked="">URLs history (autofill data)</paper-checkbox>
+              <paper-checkbox name="websocket-url-history" checked="">Web sockets history</paper-checkbox>
+              <paper-checkbox name="headers-sets" checked="">Headers sets</paper-checkbox>
+              <paper-checkbox name="variables" checked="">Variables and environments</paper-checkbox>
+              <paper-checkbox name="host-rules" checked="">Host rules</paper-checkbox>
+            </form>
+          </iron-form>
+          <div class="actions">
+            <paper-button on-click="_deleteAllClick" raised="" class="error-toast" data-action="delete">Remove</paper-button>
+          </div>
+        </div>
+      </section>
+    </iron-pages>
+
+    <paper-dialog id="dataClearDialog" on-iron-overlay-closed="_onClearDialogResult">
+      <h2 class="panel-title">Danger zone</h2>
+      <p>This will remove all application data. Without option to restore it.</p>
+      <p>Maybe you should create a backup first?</p>
+      <div class="buttons">
+        <paper-button on-click="_exportAllFile">Create file backup</paper-button>
+        <paper-button dialog-dismiss="" autofocus="">Cancel</paper-button>
+        <paper-button dialog-confirm="" class="action-button">Destroy</paper-button>
+      </div>
+    </paper-dialog>
+
+    <paper-toast id="exportToast" text="Preparing data. This may take a minute."></paper-toast>
+    <paper-toast id="deletingToast" text="Removing data from the datastore. This may take a minute."></paper-toast>
+    <paper-toast id="deletedToast" text="Data removed from your local data store"></paper-toast>
+    <paper-toast id="deletedErrorToast" text="Some of the data wasn't cleared. Please, report an issue."></paper-toast>
+`;
+  }
+
+  static get is() {return 'arc-data-settings-panel';}
+  static get properties() {
+    return {
+      // Currently displayed page of the settings editor
+      page: {
+        type: Number,
+        value: 0
+      },
+      deletingDatabases: Boolean,
+      /**
+       * History store enabled / disabled
+       */
+      historyEnabled: {
+        type: Boolean,
+        notify: true,
+        observer: '_historyChanged'
+      }
+    };
+  }
+
+  // Handler for delete all click
+  _deleteAllClick() {
+    this.$.dataClearDialog.opened = true;
+  }
+
+  // Called when delete datastore dialog is closed.
+  _onClearDialogResult(e) {
+    if (!e.detail.confirmed) {
+      return;
+    }
+    this.deleteDatabases();
+  }
+  /**
+   * Handler to be called when the clear data dialog has been closed.
+   * It it's not canceled then it will clear (destroy) selected datastores.
+   *
+   * @return {Promise}
+   */
+  deleteDatabases() {
+    const clear = this.$.clearForm.serializeForm();
+    const models = Object.keys(clear);
+    if (models.indexOf('saved-requests') !== -1) {
+      models.push('legacy-projects');
+    }
+    if (models.indexOf('variables') !== -1) {
+      models.push('variables-environments');
+    }
+
+    const e = new CustomEvent('destroy-model', {
+      bubbles: true,
+      composed: true,
+      detail: {
+        models
+      }
+    });
+    this.dispatchEvent(e);
+
+    if (!e.detail.result) {
+      throw new Error('Models not found');
+    }
+
+    this.deletingDatabases = true;
+    this.$.deletingToast.opened = true;
+    return Promise.all(e.detail.result)
+    .then(() => {
+      this.deletingDatabases = false;
+      this.$.deletingToast.opened = false;
+      this.$.deletedToast.opened = true;
+    })
+    .catch((cause) => {
+      this.$.deletedErrorToast.opened = true;
+      throw cause;
+    });
+  }
+
+  _exportAllFile() {
+    const form = this.shadowRoot.querySelector('export-form');
+    form.selectAll();
+    form.startExport();
+  }
+
+  _processValues(values) {
+    if (typeof values.historyEnabled === 'undefined') {
+      values.historyEnabled = true;
+    } else {
+      values.historyEnabled = this._boolValue(values.historyEnabled);
+    }
+    return values;
+  }
+
+  _setSettings(values) {
+    this.__settingsRestored = false;
+    this.historyEnabled = values.historyEnabled;
+    this.__settingsRestored = true;
+  }
+
+  _historyChanged(value) {
+    this.updateSetting('historyEnabled', value);
+  }
+
+  _settingsChanged(key, value) {
+    this.__settingsRestored = false;
+    switch (key) {
+      case 'historyEnabled':
+        this[key] = this._boolValue(value);
+        break;
+    }
+    this.__settingsRestored = true;
+  }
+}
+window.customElements.define(ArcDataSettingsPanel.is, ArcDataSettingsPanel);
