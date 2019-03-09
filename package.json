@@ -15,7 +15,7 @@
     "@advanced-rest-client/arc-data-export": "^3.0.0-preview.1",
     "@advanced-rest-client/arc-electron-default-theme": "^3.0.0-preview.1",
     "@advanced-rest-client/arc-local-store-preferences": "^3.0.0-preview.1",
-    "@advanced-rest-client/arc-models": "^3.0.0-preview.1",
+    "@advanced-rest-client/arc-models": "^3.0.0-preview.2",
     "@polymer/gen-typescript-declarations": "^1.6.1",
     "@polymer/iron-component-page": "^4.0.0",
     "@polymer/iron-demo-helpers": "^3.0.0",

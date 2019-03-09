@@ -142,7 +142,7 @@ class ArcDataSettingsPanel extends ArcSettingsPanelMixin(PolymerElement) {
           Data export
         </h2>
         <div class="card">
-          <export-form></export-form>
+          <export-form rest-apis="[[restApis]]"></export-form>
         </div>
       </section>
 
@@ -161,9 +161,11 @@ class ArcDataSettingsPanel extends ArcSettingsPanelMixin(PolymerElement) {
               <paper-checkbox name="auth-data" checked="">Saved passwords</paper-checkbox>
               <paper-checkbox name="url-history" checked="">URLs history (autofill data)</paper-checkbox>
               <paper-checkbox name="websocket-url-history" checked="">Web sockets history</paper-checkbox>
-              <paper-checkbox name="headers-sets" checked="">Headers sets</paper-checkbox>
               <paper-checkbox name="variables" checked="">Variables and environments</paper-checkbox>
               <paper-checkbox name="host-rules" checked="">Host rules</paper-checkbox>
+              <template is="dom-if" if="[[restApis]]">
+                <paper-checkbox name="rest-apis" checked="">REST APIs</paper-checkbox>
+              </template>
             </form>
           </iron-form>
           <div class="actions">
@@ -207,7 +209,11 @@ class ArcDataSettingsPanel extends ArcSettingsPanelMixin(PolymerElement) {
         type: Boolean,
         notify: true,
         observer: '_historyChanged'
-      }
+      },
+      /**
+       * When set is renders "REST APIs" delete option.
+       */
+      restApis: Boolean
     };
   }
 

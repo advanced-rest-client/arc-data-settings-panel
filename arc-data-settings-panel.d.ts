@@ -5,32 +5,18 @@
  *   https://github.com/Polymer/tools/tree/master/packages/gen-typescript-declarations
  *
  * To modify these typings, edit the source file(s):
- *   arc-data-settings-panel.html
+ *   arc-data-settings-panel.js
  */
 
 
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 // tslint:disable:no-any describes the API as best we are able today
 
-/// <reference path="../polymer/types/polymer-element.d.ts" />
-/// <reference path="../paper-item/paper-item.d.ts" />
-/// <reference path="../paper-item/paper-item-body.d.ts" />
-/// <reference path="../paper-toggle-button/paper-toggle-button.d.ts" />
-/// <reference path="../paper-spinner/paper-spinner.d.ts" />
-/// <reference path="../paper-toast/paper-toast.d.ts" />
-/// <reference path="../paper-checkbox/paper-checkbox.d.ts" />
-/// <reference path="../paper-button/paper-button.d.ts" />
-/// <reference path="../iron-icon/iron-icon.d.ts" />
-/// <reference path="../iron-flex-layout/iron-flex-layout.d.ts" />
-/// <reference path="../iron-form/iron-form.d.ts" />
-/// <reference path="../arc-icons/arc-icons.d.ts" />
-/// <reference path="../iron-pages/iron-pages.d.ts" />
-/// <reference path="../paper-styles/shadow.d.ts" />
-/// <reference path="../paper-icon-button/paper-icon-button.d.ts" />
-/// <reference path="../export-panel/export-form.d.ts" />
-/// <reference path="../paper-dialog/paper-dialog.d.ts" />
-/// <reference path="../arc-settings-panel-mixin/arc-settings-panel-mixin.d.ts" />
-/// <reference path="../arc-settings-panel-mixin/arc-settings-panel-styles.d.ts" />
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+
+import {ArcSettingsPanelMixin} from '@advanced-rest-client/arc-settings-panel-mixin/arc-settings-panel-mixin.js';
+
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 
 declare namespace UiElements {
 
@@ -61,7 +47,7 @@ declare namespace UiElements {
    * `--arc-settings-panel-icon-color` | Settings panel icon color | `rgba(0, 0, 0, 0.34)`
    */
   class ArcDataSettingsPanel extends
-    ArcComponents.ArcSettingsPanelMixin(
+    ArcSettingsPanelMixin(
     Object) {
 
     /**
@@ -74,6 +60,11 @@ declare namespace UiElements {
      * History store enabled / disabled
      */
     historyEnabled: boolean|null|undefined;
+
+    /**
+     * When set is renders "REST APIs" delete option.
+     */
+    restApis: boolean|null|undefined;
     _processValues(values: any): any;
     _setSettings(values: any): void;
 
@@ -98,6 +89,9 @@ declare namespace UiElements {
   }
 }
 
-interface HTMLElementTagNameMap {
-  "arc-data-settings-panel": UiElements.ArcDataSettingsPanel;
+declare global {
+
+  interface HTMLElementTagNameMap {
+    "arc-data-settings-panel": UiElements.ArcDataSettingsPanel;
+  }
 }
