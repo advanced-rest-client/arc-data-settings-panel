@@ -11,26 +11,26 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
-import {PolymerElement} from '@polymer/polymer/polymer-element.js';
-import '@polymer/paper-item/paper-item.js';
-import '@polymer/paper-item/paper-item-body.js';
-import '@polymer/paper-toggle-button/paper-toggle-button.js';
-import '@polymer/paper-spinner/paper-spinner.js';
-import '@polymer/paper-toast/paper-toast.js';
-import '@polymer/paper-checkbox/paper-checkbox.js';
-import '@polymer/paper-button/paper-button.js';
-import '@polymer/iron-icon/iron-icon.js';
-import '@polymer/iron-flex-layout/iron-flex-layout.js';
-import '@polymer/iron-form/iron-form.js';
-import '@advanced-rest-client/arc-icons/arc-icons.js';
-import '@polymer/iron-pages/iron-pages.js';
-import '@polymer/paper-styles/shadow.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@advanced-rest-client/export-panel/export-form.js';
-import '@polymer/paper-dialog/paper-dialog.js';
-import {ArcSettingsPanelMixin} from '@advanced-rest-client/arc-settings-panel-mixin/arc-settings-panel-mixin.js';
-import '@advanced-rest-client/arc-settings-panel-mixin/arc-settings-panel-styles.js';
-import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+import {PolymerElement} from '../../@polymer/polymer/polymer-element.js';
+import '../../@polymer/paper-item/paper-item.js';
+import '../../@polymer/paper-item/paper-item-body.js';
+import '../../@polymer/paper-toggle-button/paper-toggle-button.js';
+import '../../@polymer/paper-spinner/paper-spinner.js';
+import '../../@polymer/paper-toast/paper-toast.js';
+import '../../@polymer/paper-checkbox/paper-checkbox.js';
+import '../../@polymer/paper-button/paper-button.js';
+import '../../@polymer/iron-icon/iron-icon.js';
+import '../../@polymer/iron-flex-layout/iron-flex-layout.js';
+import '../../@polymer/iron-form/iron-form.js';
+import '../../@advanced-rest-client/arc-icons/arc-icons.js';
+import '../../@polymer/iron-pages/iron-pages.js';
+import '../../@polymer/paper-styles/shadow.js';
+import '../../@polymer/paper-icon-button/paper-icon-button.js';
+import '../../@advanced-rest-client/export-panel/export-form.js';
+import '../../@polymer/paper-dialog/paper-dialog.js';
+import {ArcSettingsPanelMixin} from '../../@advanced-rest-client/arc-settings-panel-mixin/arc-settings-panel-mixin.js';
+import '../../@advanced-rest-client/arc-settings-panel-mixin/arc-settings-panel-styles.js';
+import {html} from '../../@polymer/polymer/lib/utils/html-tag.js';
 /**
  * User data related settings panel for Advanced REST client
  *
